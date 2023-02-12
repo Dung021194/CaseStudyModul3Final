@@ -38,6 +38,7 @@ public class LogInServlet extends HttpServlet {
         }else {
             HttpSession session = request.getSession();
             session.setAttribute("account",customer);
+            session.setAttribute("cartDetailNum",0);
             response.sendRedirect("home");
 
         }

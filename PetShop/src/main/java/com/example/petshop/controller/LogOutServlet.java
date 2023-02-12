@@ -19,7 +19,10 @@ public class LogOutServlet extends HttpServlet {
     public void logOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("account");
+        session.removeAttribute("cart");
+        session.removeAttribute("cartDetailNum");
         response.sendRedirect("home");
+        session.removeAttribute("cartDetailNum");
 
     }
 }

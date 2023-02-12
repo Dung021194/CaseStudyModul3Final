@@ -31,7 +31,7 @@ public class SignUpServlet extends HttpServlet {
         String messSignup = "Password do not match!!!";
         String messCustomer = "Email is exits!!!";
 
-        if (!password.equals(rePassword)){
+        if (!password.equals(rePassword) && email.equals("admin@gmail.com")){
             request.setAttribute("messSignupRepass",messSignup);
             request.getRequestDispatcher("signup.jsp").forward(request,response);
         }else {

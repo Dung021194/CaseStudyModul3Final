@@ -2,21 +2,35 @@ package com.example.petshop.model;
 
 public class CartDetail {
     private int id;
-    private int dogId;
+    private Dog dog;
     private int quantity;
-    private int cartId;
+    private double price;
+    private int customerId;
+    private boolean status;
 
-    public CartDetail(int id, int dogId, int quantity, int cartId) {
+    public CartDetail(int id, Dog dog, int quantity, double price, int customerId) {
         this.id = id;
-        this.dogId = dogId;
+        this.dog = dog;
         this.quantity = quantity;
-        this.cartId = cartId;
+        this.price = price;
+        this.customerId = customerId;
+        this.status = true;
     }
 
-    public CartDetail(int dogId, int quantity, int cartId) {
-        this.dogId = dogId;
+    public CartDetail(Dog dog, int quantity, double price, int customerId) {
+        this.dog= dog;
         this.quantity = quantity;
-        this.cartId = cartId;
+        this.price = price;
+        this.customerId = customerId;
+    }
+
+    public CartDetail(int id, Dog dog, int quantity) {
+        this.id = id;
+        this.dog = dog;
+        this.quantity = quantity;
+    }
+
+    public CartDetail() {
     }
 
     public int getId() {
@@ -27,12 +41,12 @@ public class CartDetail {
         this.id = id;
     }
 
-    public int getDogId() {
-        return dogId;
+    public Dog getDog() {
+        return dog;
     }
 
-    public void setDogId(int dogId) {
-        this.dogId = dogId;
+    public void setDog(Dog dog) {
+        this.dog = dog;
     }
 
     public int getQuantity() {
@@ -43,22 +57,40 @@ public class CartDetail {
         this.quantity = quantity;
     }
 
-    public int getCartId() {
-        return cartId;
+    public double getPrice() {
+        return price;
     }
 
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "CartDetail{" +
                 "id=" + id +
-                ", dogId=" + dogId +
+                ", dog=" + dog +
                 ", quantity=" + quantity +
-                ", cartId=" + cartId +
+                ", price=" + price +
+                ", customerId=" + customerId +
+                ", status=" + status +
                 '}';
     }
-
 }

@@ -34,8 +34,12 @@
                     <p class="text-light"> ${messCreate}</p>
 
                         <div class="col-sm-6">
-                            <a href="#addEmployeeModal"  class="btn btn-success" data-toggle="modal"><i
+                            <a href="#addPetModal"  class="btn btn-success" data-toggle="modal"><i
                                     class="material-icons">&#xE147;</i> <span>Add New Pet</span></a>
+                            <a href="#addSpeciesModal"  class="btn btn-success" data-toggle="modal"><i
+                                    class="material-icons">&#xE147;</i> <span>Add New Species</span></a>
+                            <a href="/SpeciesServlet"  class="btn btn-success" data-toggle="modal"><i
+                                    class="material-icons">&#xE147;</i> <span>Show Species List</span></a>
                         </div>
                     </div>
                 </div>
@@ -106,7 +110,7 @@
 
         </div>
         <!-- Edit Modal HTML -->
-        <div id="addEmployeeModal" class="modal fade">
+        <div id="addPetModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form action="/ManagerPet?action=create" method="post">
@@ -145,6 +149,32 @@
                                 </select>
                             </div>
 
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" value="Add">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="addSpeciesModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="/SpeciesServlet?action=create" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Species</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input name="name" type="text" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input name="description" type="text" class="form-control" required>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">

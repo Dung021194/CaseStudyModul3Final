@@ -1,19 +1,36 @@
 package com.example.petshop.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 public class Cart {
      private int id;
     private int customerId;
-    private int cartId;
+    private String paymentDate;
+    private double totalPayment;
+    private boolean status;
 
-    public Cart(int id, int customerId, int cartId) {
+    public Cart(int id, int customerId, String paymentDate, double totalPayment, boolean status) {
         this.id = id;
         this.customerId = customerId;
-        this.cartId = cartId;
+        this.paymentDate = paymentDate;
+        this.totalPayment = totalPayment;
+        this.status = status;
     }
 
-    public Cart(int customerId, int cartId) {
+    public Cart(int customerId, String paymentDate, double totalPayment,boolean status) {
         this.customerId = customerId;
-        this.cartId = cartId;
+        this.paymentDate = paymentDate;
+        this.totalPayment = totalPayment;
+        this.status = status;
+    }
+
+    public Cart(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public Cart() {
     }
 
     public int getId() {
@@ -32,12 +49,28 @@ public class Cart {
         this.customerId = customerId;
     }
 
-    public int getCartId() {
-        return cartId;
+    public String getPaymentDate() {
+        return paymentDate;
     }
 
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
+    public void setPaymentDate(String paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public double getTotalPayment() {
+        return totalPayment;
+    }
+
+    public void setTotalPayment(double totalPayment) {
+        this.totalPayment = totalPayment;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     @Override
@@ -45,7 +78,9 @@ public class Cart {
         return "Cart{" +
                 "id=" + id +
                 ", customerId=" + customerId +
-                ", cartId=" + cartId +
+                ", paymentDate=" + paymentDate +
+                ", totalPayment=" + totalPayment +
+                ", status=" + status +
                 '}';
     }
 }

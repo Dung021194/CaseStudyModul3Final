@@ -2,6 +2,7 @@ package com.example.petshop.dao;
 
 import com.example.petshop.model.Customer;
 import com.example.petshop.model.Dog;
+import com.example.petshop.model.SpeciesDog;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -117,11 +118,47 @@ public class DogDAO {
         }
 
     }
+    public List<Dog> getListDogBySpecies(int id) throws ClassNotFoundException {
+        SpeciesDao speciesDao = new SpeciesDao();
+        String query = "select * from dog where species_id = ?";
+        List<Dog> dogList = new ArrayList<>();
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection conn = DriverManager.getConnection(jdbcURL,jdbcUsername,jdbcPassword))
+        {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                dogList.add(new Dog(rs.getInt(1),rs.getString(2),
+                        rs.getInt(3),rs.getDouble(4),
+                        rs.getInt(5),speciesDao.findSpeciesById(rs.getInt(6)),
+                        rs.getString(7)));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return dogList;
+    }
+    public List<Dog> searchDog(String search) throws ClassNotFoundException {
+        List<Dog> all = getListDog();
+        List<Dog> searchList= new ArrayList<>();
+
+        for (Dog d:all) {
+            if (d.getName().toLowerCase().contains(search.toLowerCase())){
+                searchList.add(d);
+            }
+        }
+        return searchList;
+    }
 
     public static void main(String[] args) throws ClassNotFoundException {
         DogDAO dogDAO = new DogDAO();
-        Dog dog = dogDAO.checkDogInCart(1);
-        System.out.println(dog);
+        List<Dog> dog = dogDAO.getListDogBySpecies(1);
+        for (Dog d:dog
+             ) {
+            System.out.println(d);
+        }
     }
 
 }

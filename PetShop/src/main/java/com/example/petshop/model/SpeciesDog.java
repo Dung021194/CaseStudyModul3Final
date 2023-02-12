@@ -6,10 +6,11 @@ public class SpeciesDog {
     private String description;
     private boolean status;
 
-    public SpeciesDog(int id, String name,String description) {
+    public SpeciesDog(int id, String name,String description,boolean status) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.status=status;
     }
 
     public SpeciesDog(String name, String description, boolean status) {

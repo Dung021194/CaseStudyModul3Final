@@ -19,7 +19,8 @@ public class SpeciesDao {
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                speciesDogList.add(new SpeciesDog(rs.getInt(1),rs.getString(2),rs.getString(3)));
+                speciesDogList.add(new SpeciesDog(rs.getInt(1),rs.getString(2),
+                        rs.getString(3),rs.getBoolean(4)));
             }
 
         } catch (SQLException e) {
@@ -36,13 +37,41 @@ public class SpeciesDao {
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                speciesDog = new SpeciesDog(rs.getInt(1), rs.getString(2),rs.getString(3));
+                speciesDog = new SpeciesDog(rs.getInt(1), rs.getString(2),
+                        rs.getString(3),rs.getBoolean(4));
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return speciesDog;
+    }
+    public void createSpecies(SpeciesDog speciesDog) throws ClassNotFoundException {
+        String query = "insert into species_dog(species_name,description,status) values (?,?,?)";
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection conn = DriverManager.getConnection(jdbcURL,jdbcUsername,jdbcPassword)){
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,speciesDog.getName());
+            ps.setString(2,speciesDog.getDescription());
+            ps.setBoolean(3,speciesDog.isStatus());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void deleteSpecies(int id){
+        String query = "delete from species_dog where id = ?";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(jdbcURL,jdbcUsername,jdbcPassword);
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1,id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static void main(String[] args) throws ClassNotFoundException {
@@ -51,6 +80,7 @@ public class SpeciesDao {
 
             System.out.println(list);
         }
+
 
 
 }
