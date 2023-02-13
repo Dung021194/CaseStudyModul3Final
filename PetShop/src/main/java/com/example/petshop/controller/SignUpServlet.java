@@ -28,6 +28,8 @@ public class SignUpServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password") ;
         String rePassword = request.getParameter("rePassword") ;
+        String phoneNumber = request.getParameter("phoneNumber");
+        String address = request.getParameter("address");
         String messSignup = "Password do not match!!!";
         String messCustomer = "Email is exits!!!";
 
@@ -37,7 +39,7 @@ public class SignUpServlet extends HttpServlet {
         }else {
             CustomerDAO customerDAO = new CustomerDAO();
             if (customerDAO.checkExistCustomer(email) == null){
-                customerDAO.creatCustomer(email,password,fullName);
+                customerDAO.creatCustomer(email,password,fullName,phoneNumber,address);
                 request.setAttribute("messLoginSuccess","Congratulations, Register success");
                 request.getRequestDispatcher("login.jsp").forward(request,response);
             }else {

@@ -30,8 +30,8 @@ public class CustomerDAO {
        }
        return null;
    }
-   public void creatCustomer(String email,String pass,String fullName) throws ClassNotFoundException {
-       String query = "insert into customer(email,pass,name) values (?,?,?)";
+   public void creatCustomer(String email,String pass,String fullName,String phoneNumber,String address) throws ClassNotFoundException {
+       String query = "insert into customer(email,pass,name,phone_number,address) values (?,?,?,?,?)";
        Class.forName("com.mysql.cj.jdbc.Driver");
        try (Connection conn = DriverManager.getConnection(jdbcURL,jdbcUsername,jdbcPassword))
        {
@@ -39,6 +39,9 @@ public class CustomerDAO {
            ps.setString(1,email);
            ps.setString(2,pass);
            ps.setString(3,fullName);
+           ps.setString(4,phoneNumber);
+           ps.setString(5,address);
+
            ps.executeUpdate();
 
        } catch (SQLException e) {
