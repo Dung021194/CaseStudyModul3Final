@@ -2,6 +2,7 @@ package com.example.petshop.dao;
 
 import com.example.petshop.model.Cart;
 import com.example.petshop.model.CartDetail;
+import com.example.petshop.model.CartFind;
 import com.example.petshop.model.Dog;
 
 import java.sql.*;
@@ -12,7 +13,7 @@ public class CartDao {
     String jdbcURL = "jdbc:mysql://localhost:3306/petshop";
     String jdbcUsername = "root";
     String jdbcPassword = "123456";
-    private List<Cart> getListCart() throws ClassNotFoundException {
+    public List<Cart> getListCart() throws ClassNotFoundException {
         String query = "select * from cart where status=true";
         List<Cart> cartList = new ArrayList<>();
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -31,7 +32,7 @@ public class CartDao {
         return cartList;
     }
     public Cart findCartById(int id) throws ClassNotFoundException {
-            String query = "select * from cart where customer_id = ?";
+            String query = "select * from cart where customer_id = ? && status = true";
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection conn = DriverManager.getConnection(jdbcURL,jdbcUsername,jdbcPassword))
             {
@@ -62,12 +63,13 @@ public class CartDao {
             }
         }
         public void updateCart(Cart cart) throws ClassNotFoundException {
-            String query = "update cart set total_payment =? where customer_id = ?";
+            String query = "update cart set total_payment =?,status =? where customer_id = ?";
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection conn = DriverManager.getConnection(jdbcURL,jdbcUsername,jdbcPassword)){
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setDouble(1, cart.getTotalPayment());
-                ps.setInt(2,cart.getCustomerId());
+                ps.setBoolean(2,cart.isStatus());
+                ps.setInt(3,cart.getCustomerId());
                 ps.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -88,5 +90,30 @@ public class CartDao {
             throw new RuntimeException(ex);
         }
     }
+    public List<CartFind> findCart(int id) throws ClassNotFoundException {
+        String query = "select cart_detail.dog_id, cart_detail.quantity, cart.total_payment,cart.payment_date " +
+                "from cart join cart_detail where cart.customer_id = cart_detail.customer_id  && cart.status = true" +
+                " && cart_detail.status =true && cart.customer_id = ?";
+        List<CartFind> cartFindList = new ArrayList<>();
+        DogDAO dogDAO = new DogDAO();
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection conn = DriverManager.getConnection(jdbcURL,jdbcUsername,jdbcPassword))
+        {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                 cartFindList.add(new CartFind(dogDAO.getDogById(rs.getInt(1))
+                         , rs.getInt(2), rs.getDouble(3), rs.getString(4)));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return cartFindList;
+    }
+
+
+
 
 }

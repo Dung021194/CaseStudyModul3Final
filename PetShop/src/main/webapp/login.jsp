@@ -31,10 +31,10 @@
 		      	<form action="login" method="post" class="signing-form">
 					<p class="text-danger" >${messLogin}</p>
 		      		<div class="form-group">
-		      			<input type="text" name="email" class="form-control" placeholder="Email" required>
+		      			<input type="email" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" class="form-control" placeholder="Email" required>
 		      		</div>
 	            <div class="form-group">
-	              <input id="password-field" type="password" name="password" class="form-control" placeholder="Password" required>
+	              <input id="password-field" type="password" pattern="^.{6,8}$" name="password" class="form-control" placeholder="Password" required>
 	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 	            </div>
 	            <div class="form-group">

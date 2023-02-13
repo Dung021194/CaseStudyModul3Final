@@ -28,20 +28,35 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="home">Home</a></li>
                         <c:if test="${sessionScope.account.email != 'admin@gmail.com'}">
-                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                        </c:if>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="priceSearchDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Search Price</a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <form action="/home?action=searchPrice" method="post">
+                                        <li><input class="nav-item" type="number" name="from" placeholder="From"/></li>
+                                        <li><input class="nav-item" type="number" name="to" placeholder="To"/></li>
+                                        <li><button type="submit">Search</button> </li>
+                                    </form>
+
+                                </ul>
+                            </li></c:if>
                         <c:if test="${sessionScope.account.email == 'admin@gmail.com'}">
                             <li class="nav-item"><a class="nav-link" href="ManagerPet">Pet Manager</a></li>
                         </c:if>
                         <c:if test="${sessionScope.account.email == 'admin@gmail.com'}">
-                            <li class="nav-item"><a class="nav-link" href="ManagerPet">Cart Manager</a></li>
+                            <li class="nav-item"><a class="nav-link" href="CartServlet?action=adminManagerOder">Cart Manager</a></li>
                         </c:if>
+
+                         <c:if
+                                 test="${sessionScope.account.email != 'admin@gmail.com'}">
+                            <li class="nav-item"><a class="nav-link" href="CartServlet?action=cartManager">Cart Manager</a></li>
+                        </c:if>
+
                         <c:if test="${sessionScope.account.email != 'admin@gmail.com'}">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">All Species</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <c:forEach items="${listSpecies}" var="o">
-                                <li><a class="dropdown-item" href="/home?action=showSpecies&id=${o.id}">${o.name}</a></li>
+                                <li><a class="dropdown-item" href="home?action=showSpecies&id=${o.id}">${o.name}</a></li>
                                 </c:forEach>
                             </ul>
                         </li></c:if>

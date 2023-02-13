@@ -49,6 +49,14 @@ public class HomeServlet extends HttpServlet {
                     throw new RuntimeException(e);
                 }
                 break;
+            case "searchPrice":
+                try {
+                    searchByPrice(request,response);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+
             default:
                 try {
                     displayALlPet(request, response);
@@ -78,6 +86,19 @@ public class HomeServlet extends HttpServlet {
         DogDAO dogDAO = new DogDAO();
         String searchName = request.getParameter("searchPet");
         List<Dog> dogList = dogDAO.searchDog(searchName);
+        if (!dogList.isEmpty()) {
+            request.setAttribute("listPet", dogList);
+            request.getRequestDispatcher("home.jsp").forward(request, response);
+        }else {
+            request.setAttribute("messPayment","No pet have this name");
+            request.getRequestDispatcher("/home").forward(request, response);
+        }
+    }
+    public void searchByPrice(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, ServletException, IOException {
+        DogDAO dogDAO = new DogDAO();
+        int from = Integer.parseInt(request.getParameter("from"));
+        int to = Integer.parseInt(request.getParameter("to"));
+        List<Dog> dogList = dogDAO.searchDogByPrice(from,to);
         if (!dogList.isEmpty()) {
             request.setAttribute("listPet", dogList);
             request.getRequestDispatcher("home.jsp").forward(request, response);

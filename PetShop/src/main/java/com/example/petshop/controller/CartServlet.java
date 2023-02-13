@@ -3,10 +3,7 @@ package com.example.petshop.controller;
 import com.example.petshop.dao.CartDao;
 import com.example.petshop.dao.CartDetailDAO;
 import com.example.petshop.dao.DogDAO;
-import com.example.petshop.model.Cart;
-import com.example.petshop.model.CartDetail;
-import com.example.petshop.model.Customer;
-import com.example.petshop.model.Dog;
+import com.example.petshop.model.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -69,7 +66,34 @@ public class CartServlet extends HttpServlet {
             case "order":
                 orderNow(request,response);
                 break;
-
+            case "cartManger":
+                try {
+                    cartManager(request,response);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "cancelOrder":
+                try {
+                    cancelOrder(request,response);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "adminManagerOder":
+                try {
+                    adminManagerOder(request,response);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "adminCancelOrder":
+                try {
+                    adminCancelOrder(request,response);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
             default:
                 response.sendRedirect("home");
 
@@ -101,8 +125,13 @@ public class CartServlet extends HttpServlet {
         CartDetailDAO cartDetailDAO = new CartDetailDAO();
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("account");
-        int cartDetailNum = (int)session.getAttribute("cartDetailNum") +1;
-        session.setAttribute("cartDetailNum",cartDetailNum);
+        Object cartDetailNum = session.getAttribute("cartDetailNum");
+        if (cartDetailNum != null ){
+            int quantity = (int) cartDetailNum;
+            session.setAttribute("cartDetailNum",(quantity+1));
+        }else {
+            session.setAttribute("cartDetailNum",1);
+        }
         int id = Integer.parseInt(request.getParameter("id"));
         boolean status = true;
         Dog dog = dogDAO.getDogById(id);
@@ -221,6 +250,9 @@ public class CartServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         Customer customer = (Customer) session.getAttribute("account");
         Map<Integer,CartDetail> cartDetailMap = (Map<Integer,CartDetail>) session.getAttribute("cart");
+        int quantity = (int) session.getAttribute("cartDetailNum");
+        int petQuantity = cartDetailMap.get(id).getQuantity();
+        session.setAttribute("cartDetailNum",(quantity-petQuantity));
         cartDetailMap.remove(id);
         cartDetailDAO.deleteCartDetail(id,customer.getId());
         response.sendRedirect("/CartServlet?action=paymentReview");
@@ -252,4 +284,50 @@ public class CartServlet extends HttpServlet {
             response.sendRedirect("home");
         }
     }
+    public void cartManager(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, ServletException, IOException {
+        CartDao cartDao = new CartDao();
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("account");
+        List<CartFind> list = cartDao.findCart(customer.getId());
+        if (list.isEmpty()){
+            response.sendRedirect("home");
+        }else {
+            request.setAttribute("listCartFind", list);
+            request.getRequestDispatcher("cartManager.jsp").forward(request, response);
+        }
+
+    }
+    public void cancelOrder(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, ServletException, IOException {
+        CartDao cartDao = new CartDao();
+        CartDetailDAO cartDetailDAO = new CartDetailDAO();
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("account");
+        cartDao.deleteAllCart(customer.getId());
+        cartDetailDAO.deleteAllCartDetail(customer.getId());
+        session.removeAttribute("cart");
+        request.setAttribute("messPayment", "Your order is cancel, thank you");
+
+        request.getRequestDispatcher("home").forward(request,response);
+    }
+    public void adminCancelOrder(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        CartDao cartDao = new CartDao();
+        CartDetailDAO cartDetailDAO = new CartDetailDAO();
+        cartDao.deleteAllCart(id);
+        cartDetailDAO.deleteAllCartDetail(id);
+        response.sendRedirect("CartServlet?action=adminManagerOder");
+    }
+    public void adminManagerOder(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException, ServletException {
+        CartDao cartDao = new CartDao();
+        List<Cart> list = cartDao.getListCart();
+        if (list.isEmpty()){
+            request.setAttribute("messPayment", "No order in list");
+            request.getRequestDispatcher("home").forward(request,response);;
+        }else {
+            request.setAttribute("listOrder", list);
+            request.getRequestDispatcher("adminCartManager.jsp").forward(request, response);
+        }
+
+    }
+
 }

@@ -151,6 +151,16 @@ public class DogDAO {
         }
         return searchList;
     }
+    public List<Dog> searchDogByPrice(int from,int to) throws ClassNotFoundException {
+        List<Dog> all = getListDog();
+        List<Dog> searchList= new ArrayList<>();
+        for (Dog d:all) {
+            if (d.getPrice()>=from && d.getPrice()<=to){
+                searchList.add(d);
+            }
+        }
+        return searchList;
+    }
 
     public static void main(String[] args) throws ClassNotFoundException {
         DogDAO dogDAO = new DogDAO();

@@ -36,12 +36,12 @@
 							<p class="text-light" size="80">${messSignup}</p>
 		      		<div class="form-group mb-3">
 		      			<%--@declare id="email"--%><label class="label" for="email">Email Address</label>
-		      			<input type="text" name="email" class="form-control" placeholder="manhtuong@gmail.com">
+		      			<input type="text" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" class="form-control" placeholder="manhtuong@gmail.com">
 		      			<span class="icon fa fa-paper-plane-o"></span>
 		      		</div>
 	            <div class="form-group mb-3">
 	            	<label class="label" for="password">Password</label>
-	              <input id="password" name="password" type="password" class="form-control" placeholder="Password">
+	              <input id="password" name="password" pattern="^.{6,8}$" type="password" class="form-control" placeholder="Password">
 	              <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 	              <span class="icon fa fa-lock"></span>
 	            </div>
